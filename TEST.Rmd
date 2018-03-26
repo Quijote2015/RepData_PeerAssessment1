@@ -1,0 +1,36 @@
+---
+title: "TEST"
+author: "Cristian Gutierrez"
+date: "26 de marzo de 2018"
+output: 
+  html_document: 
+    fig_caption: yes
+    keep_md: yes
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(dplyr)
+library(ggplot2)
+library(knitr)
+library(lubridate)
+library(scales)
+activity <- read.csv("activity.csv",header = TRUE, sep = ',')
+activity$date <- ymd(activity$date)
+steps <- activity %>% 
+  filter(!is.na(steps)) %>%
+  group_by(date) %>% 
+  summarize(steps = sum(steps))
+```
+What is mean total number of steps taken per day?
+```{r}
+ggplot(steps, aes(x = steps)) +
+  geom_histogram(fill = "mistyrose3", col=I("black"), binwidth = 1000) +
+  labs(title = "Total Number of Steps Taken Each Day",
+       x = "Steps per Day", 
+       y = "Occurances")
+```
+
